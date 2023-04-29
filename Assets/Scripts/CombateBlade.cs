@@ -5,7 +5,8 @@ using UnityEngine;
 public class CombateBlade : MonoBehaviour
 {
     public Transform controladorAtaque;
-    public float radioAtaque;
+    public float radioAtq;
+    public static float radioAtaque;
     public float danioAtaque;
 
     private Animator animator;
@@ -15,6 +16,7 @@ public class CombateBlade : MonoBehaviour
     }
     void Update()
     {
+        radioAtaque = radioAtq;
         if (Input.GetButtonDown("Fire1"))
         {
             Ataque();

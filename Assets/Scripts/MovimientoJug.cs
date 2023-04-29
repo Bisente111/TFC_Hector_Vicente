@@ -20,6 +20,7 @@ public class MovimientoJug : MonoBehaviour
     private bool puedeHacerDash = true;
     private bool sePuedeMover = true;
 
+    public Transform ControladorAtaque;
 
     //Animacion
     private Animator animator;
@@ -72,6 +73,7 @@ public class MovimientoJug : MonoBehaviour
         if (sePuedeMover)
             Mover();
 
+        MoverAtaque();
     }
 
     private void Mover()
@@ -87,6 +89,35 @@ public class MovimientoJug : MonoBehaviour
         }
     }
 
+    private void MoverAtaque()
+    {
+        float aux = CombateBlade.radioAtaque;
+        if (direccion.x == 0)
+        {
+            if(direccion.y <= 0)
+            {
+                ControladorAtaque.position = new Vector2(spriteRenderer.transform.position.x, spriteRenderer.transform.position.y - aux);
+
+            }
+            else
+            {
+                ControladorAtaque.position = new Vector2(spriteRenderer.transform.position.x, spriteRenderer.transform.position.y + aux);
+
+            }
+        }
+        else
+        {
+            if (!esDerecha)
+            {
+                ControladorAtaque.position = new Vector2(spriteRenderer.transform.position.x - aux, spriteRenderer.transform.position.y);
+            }
+            else
+            {
+                ControladorAtaque.position = new Vector2(spriteRenderer.transform.position.x + aux, spriteRenderer.transform.position.y);
+            }
+        }
+    }
+
     private void Girar()
     {
         esDerecha = !esDerecha;
@@ -95,7 +126,7 @@ public class MovimientoJug : MonoBehaviour
 
     public static void isAtack(bool ataque)
     {
-        Timer timer;
+        /*Timer timer;
         if (ataque)
         {
             velocidadDash = 0;
@@ -107,6 +138,6 @@ public class MovimientoJug : MonoBehaviour
             velocidadDash = 20;
             velocidadMov = 10;
         };
-        timer.Start();
+        timer.Start();*/
     }
 }

@@ -596,7 +596,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284386305}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.076, y: -1.0333, z: 0}
   m_LocalScale: {x: 29.9644, y: 18.0066, z: 1}
   m_ConstrainProportionsScale: 0
@@ -823,7 +823,7 @@ Transform:
   m_GameObject: {fileID: 1502562398}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.383, y: -0.046, z: 0}
-  m_LocalScale: {x: 0.60300004, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.60300004, y: 0.6, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 194966413}
@@ -913,6 +913,7 @@ MonoBehaviour:
   direccion: {x: 0, y: 0}
   tiempoDash: 0.4
   tr: {fileID: 194966414}
+  ControladorAtaque: {fileID: 1910728323}
 --- !u!114 &1502562405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,7 +927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controladorAtaque: {fileID: 1910728323}
-  radioAtaque: 1
+  radioAtq: 1.1
   danioAtaque: 1
 --- !u!1 &1910728322
 GameObject:
