@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemigo : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    public float velocidad = 10f;
+    public float velocidad = 5f;
     public int Vida = 100;
-    public float tiempoPatrullaje = 2f;
-    public float distanciaTarget = 10f;
-    public float rangoAtaque = 1f;
-    public float danio = 10;
+    public float tiempoPatrullaje = 3f;
+    public float distanciaTarget = 5f;
 
     private Transform player;
     private Vector2 direccion;
@@ -21,7 +19,7 @@ public class Enemigo : MonoBehaviour
     // Inicialización
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform; 
         tiempoPatrullar = tiempoPatrullaje;
     }
 
@@ -35,7 +33,6 @@ public class Enemigo : MonoBehaviour
         else
         {
             Perseguir();
-            Attack();
         }
     }
 
@@ -44,17 +41,17 @@ public class Enemigo : MonoBehaviour
     {
         tiempoPatrullar -= Time.deltaTime;
 
-        if (tiempoPatrullar <= 0f)
+        if (tiempoPatrullar <= 0)
         {
 
-            direccion = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+            direccion = new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)).normalized;
             tiempoPatrullar = tiempoPatrullaje;
         }
 
-
+        
         transform.position += (Vector3)direccion * velocidad * Time.deltaTime;
 
-
+        
         if (Vector2.Distance(transform.position, player.position) <= distanciaTarget)
         {
             esPatrullando = false;
@@ -64,13 +61,13 @@ public class Enemigo : MonoBehaviour
     // Metodo que se encarga de que persiga al jugador
     void Perseguir()
     {
-
+        
         direccion = ((Vector2)player.position - (Vector2)transform.position).normalized;
 
-
+        
         transform.position += (Vector3)direccion * velocidad * Time.deltaTime;
 
-
+        
         if (Vector2.Distance(transform.position, player.position) > distanciaTarget * 1.5f)
         {
             esPatrullando = true;
@@ -78,40 +75,17 @@ public class Enemigo : MonoBehaviour
     }
 
     // Metodo para restar vida al enemio si es golpeado
-    public void RecibirDanio(float damage)
+    public void RecibirDanio(int damage)
     {
-        Vida -= (int)damage;
+        Vida -= damage;
+
         if (Vida <= 0)
         {
             Muerte();
         }
     }
 
-    void Attack()
-    {
-        // Comprueba si el jugador está dentro del rango de ataque
-        if (Vector2.Distance(transform.position, player.position) <= rangoAtaque)
-        {
-            // Reduce la salud del jugador
-            Jugador vidaJugador = player.GetComponent<Jugador>();
-            if (vidaJugador != null)
-            {
-                vidaJugador.RecibirDanio(danio);
-            }
-        }
-    }
-
-    // Dibuja un gizmo para mostrar la distancia de persecución y de ataque
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, distanciaTarget);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, rangoAtaque);
-    }
-
-// Metodo de muerte
+    // Metodo de muerte
     void Muerte()
     {
         Destroy(gameObject);

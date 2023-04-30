@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Timers;
 
-public class MovimientoJug : MonoBehaviour
+public class Jugador : MonoBehaviour
 {
     private Rigidbody2D rb2d;
     private SpriteRenderer spriteRenderer;
@@ -19,6 +19,10 @@ public class MovimientoJug : MonoBehaviour
     private float gravedadInicial;
     private bool puedeHacerDash = true;
     private bool sePuedeMover = true;
+    //Vida
+    public float vidaMax = 100;
+    public float vida;
+
 
     public Transform ControladorAtaque;
 
@@ -29,6 +33,7 @@ public class MovimientoJug : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         gravedadInicial = rb2d.gravityScale;
+        vida = vidaMax;
         animator = GetComponent<Animator>();
     }
 
@@ -124,20 +129,18 @@ public class MovimientoJug : MonoBehaviour
         spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 
-    public static void isAtack(bool ataque)
+    public void RecibirDanio(float damage)
     {
-        /*Timer timer;
-        if (ataque)
+        vida -= damage;
+
+        if (vida <= 0)
         {
-            velocidadDash = 0;
-            velocidadMov = 0;
+            Die();
         }
-        timer = new Timer(1000);
-        timer.Elapsed += (sender, e) =>
-        {
-            velocidadDash = 20;
-            velocidadMov = 10;
-        };
-        timer.Start();*/
+    }
+
+    void Die()
+    {
+        //Reiniciaremos el juego
     }
 }

@@ -27,15 +27,16 @@ public class CombateBlade : MonoBehaviour
     {
         Collider2D[] objetos = Physics2D.OverlapCircleAll(controladorAtaque.position, radioAtaque);
         animator.SetTrigger("Ataque");
-        MovimientoJug.isAtack(true);
         foreach (Collider2D collision in objetos)
         {
             if (collision.CompareTag("Enemigo"))
             {
-                collision.transform.GetComponent<Enemigo>().tomarDanio(danioAtaque);
+                collision.transform.GetComponent<Enemigo>().RecibirDanio(danioAtaque);
             }
         }
     }
+
+
 
     private void OnDrawGizmos()
     {
