@@ -9,12 +9,15 @@ public class Enemigo : MonoBehaviour
     public float tiempoPatrullaje = 2f;
     public float distanciaTarget = 10f;
     public float rangoAtaque = 1f;
+    public float rangoAtaqueF = 1f;
     public float danio = 10;
 
     private Transform player;
     private Vector2 direccion;
     private float tiempoPatrullar;
     private bool esPatrullando = true;
+    private SpriteRenderer spriteRenderer;
+    private bool esDerecha = false;
 
     private Animator animator;
 
@@ -23,22 +26,38 @@ public class Enemigo : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         tiempoPatrullar = tiempoPatrullaje;
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Actualización
-    void Update()
+    private void Update()
+    {
+        direccion = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        animator.SetFloat("X", Mathf.Abs(direccion.x));
+        animator.SetFloat("Y", Mathf.Abs(direccion.y));
+
+        if (Vector2.Distance(transform.position, player.position) <= rangoAtaqueF)
+        {
+            animator.SetTrigger("Ataque");
+        }
+
+    }
+
+    private void FixedUpdate()
     {
         if (esPatrullando)
         {
             Patrullar();
+            Girar();
         }
         else
         {
             Perseguir();
             Attack();
+            Girar();
         }
     }
-
     // Metodo que se encarga de que el enemigo este patrullando
     void Patrullar()
     {
@@ -89,6 +108,7 @@ public class Enemigo : MonoBehaviour
 
     void Attack()
     {
+
         // Comprueba si el jugador está dentro del rango de ataque
         if (Vector2.Distance(transform.position, player.position) <= rangoAtaque)
         {
@@ -101,6 +121,20 @@ public class Enemigo : MonoBehaviour
         }
     }
 
+    private void Girar()
+    {
+        if (direccion.x > 0 && !esDerecha)
+        {
+            esDerecha = !esDerecha;
+            spriteRenderer.flipX = !spriteRenderer.flipX;
+        }
+        else if (direccion.x < 0 && esDerecha)
+        {
+            esDerecha = !esDerecha;
+            spriteRenderer.flipX = !spriteRenderer.flipX;
+        }
+    }
+
     // Dibuja un gizmo para mostrar la distancia de persecución y de ataque
     private void OnDrawGizmosSelected()
     {
@@ -109,6 +143,9 @@ public class Enemigo : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, rangoAtaque);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, rangoAtaqueF);
     }
 
 // Metodo de muerte
