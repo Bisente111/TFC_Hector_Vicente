@@ -23,6 +23,8 @@ public class Jugador : MonoBehaviour
     public float vidaMax = 100;
     public float vida;
 
+    public Vector2 fuerzaRetroceso;
+
 
     public Transform ControladorAtaque;
 
@@ -129,7 +131,7 @@ public class Jugador : MonoBehaviour
         spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 
-    public void RecibirDanio(float damage)
+    public void RecibirDanio(float damage, Vector2 direccionAtaque)
     {
         vida -= damage;
 

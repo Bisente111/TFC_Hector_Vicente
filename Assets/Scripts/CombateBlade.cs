@@ -9,6 +9,7 @@ public class CombateBlade : MonoBehaviour
     public static float radioAtaque;
     public float danioAtaque;
 
+
     private Animator animator;
     private void Start()
     {
