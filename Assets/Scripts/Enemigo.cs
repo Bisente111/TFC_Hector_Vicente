@@ -11,8 +11,6 @@ public class Enemigo : MonoBehaviour
     public float rangoAtaque = 1f;
     public float rangoAtaqueF = 1f;
     public float danio = 10;
-    private float nextAttack = 0f;
-    public float cooldownAttack = 2f;
 
     private Transform player;
     private Vector2 direccion;
@@ -38,11 +36,10 @@ public class Enemigo : MonoBehaviour
         direccion = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         animator.SetFloat("X", Mathf.Abs(direccion.x));
         animator.SetFloat("Y", Mathf.Abs(direccion.y));
-        if (canAttack()) {
-            if (Vector2.Distance(transform.position, player.position) <= rangoAtaqueF)
-            {
-                animator.SetTrigger("Ataque");
-            }
+
+        if (Vector2.Distance(transform.position, player.position) <= rangoAtaqueF)
+        {
+            animator.SetTrigger("Ataque");
         }
 
     }
@@ -109,32 +106,19 @@ public class Enemigo : MonoBehaviour
         }
     }
 
-    private void Attack()
+    void Attack()
     {
-        if (canAttack()) {
-            // Comprueba si el jugador está dentro del rango de ataque
-            if (Vector2.Distance(transform.position, player.position) <= rangoAtaque)
-            {
-                animator.SetTrigger("Ataque");
 
-                // Reduce la salud del jugador
-                Jugador vidaJugador = player.GetComponent<Jugador>();
-                if (vidaJugador != null)
-                {
-                    vidaJugador.RecibirDanio(danio, direccion);
-                }
+        // Comprueba si el jugador está dentro del rango de ataque
+        if (Vector2.Distance(transform.position, player.position) <= rangoAtaque)
+        {
+            // Reduce la salud del jugador
+            Jugador vidaJugador = player.GetComponent<Jugador>();
+            if (vidaJugador != null)
+            {
+                vidaJugador.RecibirDanio(danio);
             }
         }
-    }
-
-    private bool canAttack()
-    {
-        if (Time.time >= nextAttack)
-        {
-            nextAttack = Time.time + cooldownAttack;
-            return true;
-        }
-        return false;
     }
 
     private void Girar()

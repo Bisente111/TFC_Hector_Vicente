@@ -8,7 +8,9 @@ public class Enemy : MonoBehaviour
     public int Vida = 100;
     public float tiempoPatrullaje = 3f;
     public float distanciaTarget = 5f;
+    private SpriteRenderer spriteRenderer;
 
+    private bool esDerecha = false;
     private Transform player;
     private Vector2 direccion;
     private float tiempoPatrullar;
@@ -17,14 +19,25 @@ public class Enemy : MonoBehaviour
     private Animator animator;
 
     // Inicialización
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform; 
         tiempoPatrullar = tiempoPatrullaje;
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Actualización
-    void Update()
+    private void Update()
+    {
+        direccion = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        animator.SetFloat("X", Mathf.Abs(direccion.x));
+        animator.SetFloat("Y", Mathf.Abs(direccion.y));
+
+    }
+
+
+    private void FixedUpdate()
     {
         if (esPatrullando)
         {
@@ -37,7 +50,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Metodo que se encarga de que el enemigo este patrullando
-    void Patrullar()
+    private void Patrullar()
     {
         tiempoPatrullar -= Time.deltaTime;
 
@@ -59,7 +72,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Metodo que se encarga de que persiga al jugador
-    void Perseguir()
+    private void Perseguir()
     {
         
         direccion = ((Vector2)player.position - (Vector2)transform.position).normalized;
@@ -85,9 +98,23 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void Girar()
+    {
+        if (direccion.x > 0 && !esDerecha)
+        {
+            esDerecha = !esDerecha;
+            spriteRenderer.flipX = !spriteRenderer.flipX;
+        }
+        else if(true)
+        {
+
+        }
+    }
+
     // Metodo de muerte
-    void Muerte()
+    private void Muerte()
     {
         Destroy(gameObject);
     }
+
 }
