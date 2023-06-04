@@ -9,6 +9,7 @@ public class CombateBlade : MonoBehaviour
     public static float radioAtaque;
     public float danioAtaque;
 
+    private Enemigo enemigo;
 
     private Animator animator;
     private void Start()
@@ -32,7 +33,11 @@ public class CombateBlade : MonoBehaviour
         {
             if (collision.CompareTag("Enemigo"))
             {
-                collision.transform.GetComponent<Enemigo>().RecibirDanio(danioAtaque);
+                if (collision.gameObject.GetComponent<Enemigo>().Vida > 0)
+                {
+                    collision.transform.GetComponent<Enemigo>().RecibirDanio(danioAtaque);
+                }
+                
             }
         }
     }

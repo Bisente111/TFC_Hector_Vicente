@@ -21,10 +21,12 @@ public class Jugador : MonoBehaviour
     private bool sePuedeMover = true;
     //Vida
     public float vidaMax = 100;
-    public float vida;
+    public float vida = 0f;
+    public BarraDeVida barraDeVida;
 
     public Vector2 fuerzaRetroceso;
 
+    public event EventHandler MuerteJugador;
 
     public Transform ControladorAtaque;
 
@@ -36,7 +38,9 @@ public class Jugador : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         gravedadInicial = rb2d.gravityScale;
         vida = vidaMax;
+        barraDeVida.InicializarBarraDeVida(vida);
         animator = GetComponent<Animator>();
+        gameObject.SetActive(true);
     }
 
     private void Update()
@@ -51,7 +55,7 @@ public class Jugador : MonoBehaviour
         {
             animator.SetBool("Inactivo", false);
         }
-        if (Input.GetKeyDown(KeyCode.Space) && puedeHacerDash)
+        if (Input.GetButtonDown("Jump") && puedeHacerDash)
         {
             StartCoroutine(Dash());
         }
@@ -64,6 +68,7 @@ public class Jugador : MonoBehaviour
         rb2d.gravityScale = 0;
         rb2d.velocity = new Vector2(velocidadDash * direccion.x, velocidadDash * direccion.y);
         tr.emitting = true;
+        animator.SetTrigger("Dash");
 
         yield return new WaitForSeconds(tiempoDash);
 
@@ -134,15 +139,17 @@ public class Jugador : MonoBehaviour
     public void RecibirDanio(float damage, Vector2 direccionAtaque)
     {
         vida -= damage;
-
+        barraDeVida.CambiarVidaActual(vida);
         if (vida <= 0)
         {
+            animator.SetTrigger("Muerte");
             Die();
         }
     }
 
-    void Die()
+    public void Die()
     {
-        //Reiniciaremos el juego
+        MuerteJugador?.Invoke(this, EventArgs.Empty);
+        gameObject.SetActive(false);
     }
 }
